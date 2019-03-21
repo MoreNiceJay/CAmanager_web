@@ -69,28 +69,23 @@
           <ul class="nav nav-sidebar">
             <li><a href="">Step 4:Configure revocation</a></li>
             <li><a href="">Step 5:Review</a></li>
-            </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Configure the certificate authority (CA) name</h1>
+          <h1 class="page-header">Review and Create</h1>
 
           <div class="row placeholders">
             <div class="col-sm-9 col-sm-offset-0 col-md-10 col-md-offset-0 placeholder">
-                <span class="text-muted">Name your CA using the distinguished (DN) format. The name is used as the subject in the CA certificate and as the issuer in certificates that the CA issues. These names cannot be changed later.</span>
+                <span class="text-muted">Review your choices.</span>
             </div>
           </div>
-
-          <div class="row">
-            <form action="configure_CA_key_algorithm" method="POST" name="test" >
-              <input type="hidden" value={{ data }} name="prev_data">              {% csrf_token %}
-              <table>
-                {{ form.as_p  }}
-              </table>
-              <button type="submit" class="save btn-default">Save</button>
-            </form>
-
-          </div>
-
+          <form action="review_and_create" method="POST"  name="test" >
+            {% csrf_token %}
+            <table>
+              {{ form.as_p  }}
+            </table>
+            <button type="submit" class="save btn-default">Save</button>
+          </form>
+          {{ hello }}
 
 
 

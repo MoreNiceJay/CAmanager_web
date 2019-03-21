@@ -84,12 +84,17 @@
               {% csrf_token %}
               <table>
                 {{ form.as_p  }}
+                <input type="hidden" value={{ organization }} name="organization">
+                <input type="hidden" value={{ organization_unit }} name="organization_unit">
+                <input type="hidden" value={{ country }} name="country">
+                <input type="hidden" value={{ state }} name="state">
+                <input type="hidden" value={{ locality }} name="locality">
+                <input type="hidden" value={{ common_name }} name="common_name">
               </table>
               <button type="submit" class="save btn-default">Save</button>
-              <input type="hidden" value={{ data }} name="organization">
+
             </form>
           </div>
-
 
 
 

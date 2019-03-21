@@ -10,8 +10,10 @@ class subjectForm(forms.Form):
     common_name = forms.CharField()
 
 class algorithmForm(forms.Form):
-    CHOICES = (('RSA 2048', 'rsa_2048',), ('RSA 4096', 'rsa_4096',) , ('ECDSA P256', 'ecdsa_p256',), ('ECDSA P384', 'ecdsa_p384',))
+    CHOICES = (('rsa_2048', 'RSA 2048', ), ('rsa_4096','RSA 4096', ) , ('ecdsa_p256','ECDSA P256', ), ('ecdsa_p384','ECDSA P384', ))
     algorithm = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES)
 
 class CRLForm(forms.Form):
-    pass
+    CRL_name = forms.CharField()
+    valid_period = forms.CharField()
+

@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a831da90-b0e4-4067-baeb-d86c3be36954" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/genkey/templates/genkey/review_and_create.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/genkey/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/genkey/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/genkey/templates/genkey/configure_CA_key_algorithm.html" beforeDir="false" afterPath="$PROJECT_DIR$/genkey/templates/genkey/configure_CA_key_algorithm.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/genkey/templates/genkey/configure_CA_subject_name.html" beforeDir="false" afterPath="$PROJECT_DIR$/genkey/templates/genkey/configure_CA_subject_name.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/genkey/templates/genkey/configure_certificate_revocation.html" beforeDir="false" afterPath="$PROJECT_DIR$/genkey/templates/genkey/configure_certificate_revocation.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/genkey/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/genkey/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/genkey/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/genkey/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/genkey/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/genkey/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/genkey/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/genkey/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,40 +19,43 @@
       <file leaf-file-name="settings.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mysite/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="295">
-              <caret line="89" column="36" selection-start-line="89" selection-start-column="36" selection-end-line="89" selection-end-column="36" />
+            <state relative-caret-position="479">
+              <caret line="85" column="37" selection-start-line="85" selection-start-column="36" selection-end-line="85" selection-end-column="37" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/genkey/urls.py">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/genkey/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="276">
-              <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
+            <state relative-caret-position="441">
+              <caret line="113" column="42" selection-start-line="113" selection-start-column="42" selection-end-line="113" selection-end-column="42" />
               <folding>
-                <element signature="e#0#32#0" expanded="true" />
+                <element signature="e#0#35#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="post_list.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/genkey/templates/genkey/post_list.html">
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/genkey/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="500">
-              <caret line="93" column="98" selection-start-line="93" selection-start-column="98" selection-end-line="93" selection-end-column="98" />
+            <state relative-caret-position="271">
+              <caret line="12" column="47" lean-forward="true" selection-start-line="12" selection-start-column="47" selection-end-line="12" selection-end-column="47" />
+              <folding>
+                <element signature="e#0#28#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/genkey/views.py">
+      <file leaf-file-name="admin.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/genkey/admin.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="395">
-              <caret line="50" column="23" lean-forward="true" selection-start-line="50" selection-start-column="23" selection-end-line="50" selection-end-column="23" />
+            <state relative-caret-position="92">
+              <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
               <folding>
-                <element signature="e#0#35#0" expanded="true" />
+                <element signature="e#0#32#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -92,20 +91,11 @@
       <file leaf-file-name="forms.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/genkey/forms.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="9" column="35" lean-forward="true" selection-start-line="4" selection-start-column="4" selection-end-line="9" selection-end-column="35" />
+            <state relative-caret-position="276">
+              <caret line="12" column="83" selection-start-line="12" selection-start-column="73" selection-end-line="12" selection-end-column="83" />
               <folding>
                 <element signature="e#0#24#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="post_list2.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/genkey/templates/genkey/post_list2.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="15" selection-start-line="15" selection-end-line="15" />
             </state>
           </provider>
         </entry>
@@ -154,6 +144,11 @@
       <find>thread</find>
       <find>'organization'</find>
       <find>organ</find>
+      <find>author</find>
+      <find>post</find>
+      <find>country</find>
+      <find>load_pem</find>
+      <find>input</find>
     </findStrings>
     <dirStrings>
       <dir>C:\Users\Jay\Desktop\모파스\프로젝트\스케쥴러\CAmanager_web\genkey\static\css\lib</dir>
@@ -179,13 +174,16 @@
         <option value="$PROJECT_DIR$/genkey/templates/genkey/configure_CA_subject_name.html" />
         <option value="$PROJECT_DIR$/genkey/templates/genkey/configure_CA_key_algorithm.html" />
         <option value="$PROJECT_DIR$/genkey/templates/genkey/configure_certificate_revocation.html" />
+        <option value="$PROJECT_DIR$/genkey/admin.py" />
         <option value="$PROJECT_DIR$/genkey/views.py" />
+        <option value="$PROJECT_DIR$/../CAManger_CLI/CAmanager.py" />
+        <option value="$PROJECT_DIR$/genkey/models.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="-1834" />
-    <option name="y" value="147" />
+  <component name="ProjectFrameBounds" extendedState="1">
+    <option name="x" value="-1854" />
+    <option name="y" value="18" />
     <option name="width" value="1823" />
     <option name="height" value="1018" />
   </component>
@@ -276,7 +274,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1834" y="147" width="1823" height="1018" extended-state="0" />
+    <frame x="-1854" y="18" width="1823" height="1018" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24985994" />
@@ -418,9 +416,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/genkey/models.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/genkey/tests.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -445,23 +440,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="500">
           <caret line="93" column="98" selection-start-line="93" selection-start-column="98" selection-end-line="93" selection-end-column="98" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/genkey/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="9" column="35" lean-forward="true" selection-start-line="4" selection-start-column="4" selection-end-line="9" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mysite/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="295">
-          <caret line="89" column="36" selection-start-line="89" selection-start-column="36" selection-end-line="89" selection-end-column="36" />
         </state>
       </provider>
     </entry>
@@ -493,12 +471,62 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/genkey/admin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="92">
+          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genkey/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="12" column="83" selection-start-line="12" selection-start-column="73" selection-end-line="12" selection-end-column="83" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/genkey/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="50" column="23" lean-forward="true" selection-start-line="50" selection-start-column="23" selection-end-line="50" selection-end-column="23" />
+        <state relative-caret-position="441">
+          <caret line="113" column="42" selection-start-line="113" selection-start-column="42" selection-end-line="113" selection-end-column="42" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/PycharmProjects/Leetcode/venv/Lib/site-packages/cryptography/x509/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../CAManger_CLI/CAmanager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="256">
+          <caret line="149" column="76" lean-forward="true" selection-start-line="149" selection-start-column="76" selection-end-line="149" selection-end-column="76" />
+          <folding>
+            <element signature="e#0#85#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mysite/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="479">
+          <caret line="85" column="37" selection-start-line="85" selection-start-column="36" selection-end-line="85" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genkey/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="271">
+          <caret line="12" column="47" lean-forward="true" selection-start-line="12" selection-start-column="47" selection-end-line="12" selection-end-column="47" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -71,33 +71,25 @@
             <li><a href="">Step 5:Review</a></li>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Configure certificate revocation</h1>
+          <h1 class="page-header">Request Certificate</h1>
 
           <div class="row placeholders">
             <div class="col-sm-9 col-sm-offset-0 col-md-10 col-md-offset-0 placeholder">
-                <span class="text-muted">You can revoke a certificate to tell clients that they should no longer trust it. You can use certification lists(CRLs) to communicate revocation status.</span>
+                <span class="text-muted">choose your CA</span>
             </div>
-          </div>
-
-          <div class="row">
-            <form action="review_and_create" method="POST"  name="test" >
-              <input type="hidden" value={{ algorithm  }} name="algorithm">
-              <input type="hidden" value={{ organization }} name="organization">
-                <input type="hidden" value={{ organization_unit }} name="organization_unit">
-                <input type="hidden" value={{ country }} name="country">
-                <input type="hidden" value={{ state }} name="state">
-                <input type="hidden" value={{ locality }} name="locality">
-                <input type="hidden" value={{ common_name }} name="common_name">
-                <input type="hidden" value={{ common_name }} name="domain">
-              {% csrf_token %}
-              <table>
-                {{ form.as_p  }}
-              </table>
-              <button type="submit" class="save btn-default">Save</button>
-            </form>
 
           </div>
+          <form action="export_certificate" method="POST"  name="test" >
+            <input type="hidden" value="{{ csr }}" name="csr">
 
+            {% csrf_token %}
+            <table>
+              {{ form.as_p  }}
+            </table>
+
+            <button type="submit" class="save btn-default">Save</button>
+          </form>
+          {{ csr }}
 
 
 

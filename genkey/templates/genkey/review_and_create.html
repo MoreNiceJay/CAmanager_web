@@ -78,14 +78,16 @@
                 <span class="text-muted">Review your choices.</span>
             </div>
           </div>
-          <form action="review_and_create" method="POST"  name="test" >
+          <form action="request_certificate" method="POST"  name="test" >
+            <input type="hidden" value="{{ csr }}" name="csr">
+
             {% csrf_token %}
             <table>
               {{ form.as_p  }}
             </table>
             <button type="submit" class="save btn-default">Save</button>
           </form>
-          {{ hello }}
+          {{ csr }}
 
 
 

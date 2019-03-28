@@ -62,48 +62,38 @@
         <div class="col-xs-2 col-sm-2 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
             <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-            <li><h6>Step 1:Start to generate CSR</h6></li>
-            <li><h6>Step 2:Type your company info</h6></strong></li>
-            <li><h5><strong>Step 3:Choose algorithm</h5></li>
+            <li><h5><strong>Step 1:Start to generate CSR</strong></h5></li>
             </ul>
           <ul class="nav nav-sidebar">
-
-
+            <li><h6>Step 2:Type your company info</h6></li>
+            <li><h6>Step 3:Choose algorithm</h6></li>
             <li><h6>Step 4:Your CSR is ready</h6></li>
             <li><h6>Step 5:Choose your CA for signing</h6></li>
             <li><h6>Step 6:Your Certificate is ready</h6></li>
         </div>
         <div class="col-xs-10 col-xs-offset-2 col-sm-10 col-sm-offset-2 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Step 3:Choose algorithm</h1>
+          <h1 class="page-header">Step 1:Start to generate CSR</h1>
 
           <div class="row placeholders">
             <div class="col-xs-10 col-xs-offset-0 col-sm-10 col-sm-offset-0 col-md-10 col-md-offset-0 placeholder">
-                <span class="text-muted">Choose the key algorithm for your CSR and Certificate.</span>
+                <span class="text-muted">The process will be CSR Generation -> CA Choice -> Certificate Download.</span>
             </div>
           </div>
           <div class="row">
+            <div class="col-xs-12 col-xs-offset-0 col-sm-12 col-sm-offset-0 col-md-12 col-md-offset-0 radio">
 
+                  <span> Please click Start button</span>
+
+            </div>
+
+            <div class="col-xs-12 col-xs-offset-0 col-sm-12 col-sm-offset-0 col-md-12 col-md-offset-0 radio">
+
+              <button type="submit" onclick="location.href='http://127.0.0.1:8000/configure_CA_subject_name'" class="btn btn-default">Start</button>
 
           </div>
-          <div class="row">
-            <div class="col-xs-10 col-xs-offset-0 col-sm-10 col-sm-offset-0 col-md-10 col-md-offset-0 row">
-              <div class="form-group">
-            <form action="review_and_create" method="POST">
-              {% csrf_token %}
-              <table>
-                {{ form.as_p  }}
-                <input type="hidden" value={{ organization }} name="organization">
-                <input type="hidden" value={{ organization_unit }} name="organization_unit">
-                <input type="hidden" value={{ country }} name="country">
-                <input type="hidden" value={{ state }} name="state">
-                <input type="hidden" value={{ locality }} name="locality">
-                <input type="hidden" value={{ common_name }} name="common_name">
-                <input type="hidden" value={{ common_name }} name="domain">
-              </table>
-              <button type="submit" class="btn btn-default">Next</button>
+                        </div>
 
-            </form>
-          </div>
+
 
 
 

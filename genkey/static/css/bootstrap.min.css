@@ -3510,6 +3510,8 @@ select[multiple].input-group-sm>.form-control, select[multiple].input-group-sm>.
     vertical-align: baseline;
     border-radius: .25em;
 }
+
+
 a.label:focus, a.label:hover {
     color: #fff;
     text-decoration: none;
@@ -5055,4 +5057,10 @@ td.visible-print, th.visible-print {
     .hidden-print {
     display: none!important;
 }
+}
+
+/*custom*/
+
+.customized-label{
+display:flex;
 }

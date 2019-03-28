@@ -59,25 +59,48 @@
 
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
+        <div class="col-xs-2 col-sm-2 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
             <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-            <li><a href="#"><strong>Step 1:Select CA type</strong></a></li>
-            <li><a href="#">Step 2:Configure CA subject name</a></li>
-            <li><a href="#">Step 3:Configure CA key algorithm</a></li>
-          </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Step 4:Configure revocation</a></li>
-            <li><a href="">Step 5:Review</a></li>
-        </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Review and Create</h1>
+            <li><h6>Step 1:Start to generate CSR</h6></li>
+            <li><h6>Step 2:Type your company info</h6></strong></li>
+            <li><h6>Step 3:Choose algorithm</h6></li>
+            <li><h5><strong><h6>Step 4:Your CSR is ready</strong></h5></li>
 
+            </ul>
+          <ul class="nav nav-sidebar">
+
+
+            <li><h6>Step 5:Choose your CA for signing</h6></li>
+            <li><h6>Step 6:Your Certificate is ready</h6></li>
+        </div>
+        <div class="col-xs-10 col-xs-offset-2 col-sm-10 col-sm-offset-2 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">Step 4:Your CSR is ready</h1>
+
+          <div class="row placeholders">
+            <div class="col-xs-10 col-xs-offset-0 col-sm-10 col-sm-offset-0 col-md-10 col-md-offset-0 placeholder">
+                <span class="text-muted">Submit the following certificate signing request(CSR) to a CA. Have the CA sign it and create a certificate.</span>
+            </div>
+          </div>
+          <br />
+          <br />
+          <div class="row">
+          {{ csr }}
+          </div>
+          </br>
           <div class="row placeholders">
             <div class="col-sm-9 col-sm-offset-0 col-md-10 col-md-offset-0 placeholder">
                 <span class="text-muted">Review your choices.</span>
+               <form action="CSR_download" method="POST"  name="test">
+                 <input type="hidden" value="{{ csr }}" name="csr">
+                              {% csrf_token %}
+
+                 <button type="submit" class="btn btn-default">Export_CSR</button>
+               </form>
             </div>
           </div>
+
+
           <form action="request_certificate" method="POST"  name="test" >
             <input type="hidden" value="{{ csr }}" name="csr">
 
@@ -85,9 +108,9 @@
             <table>
               {{ form.as_p  }}
             </table>
-            <button type="submit" class="save btn-default">Save</button>
+            <button type="submit" class="btn btn-default">Save</button>
           </form>
-          {{ csr }}
+
 
 
 

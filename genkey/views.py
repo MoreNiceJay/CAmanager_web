@@ -1,8 +1,11 @@
+import sys, pycurl,json, random, hashlib, calendar,time, datetime, os, random
+
 from django.shortcuts import render
 from .forms import subjectForm, algorithmForm, CRLForm, CA_choice
 from django.shortcuts import redirect
 from django.http import Http404
 import json
+from cryptography.hazmat.primitives.serialization import Encoding, PrivateFormat, NoEncryption,load_pem_private_key
 from .models import Issuer
 from cryptography import x509
 from cryptography.x509.oid import NameOID
@@ -10,16 +13,16 @@ from cryptography.hazmat.primitives import serialization,hashes
 from cryptography.x509 import load_pem_x509_csr
 from cryptography.hazmat.primitives.asymmetric import rsa, ec
 from cryptography.hazmat.backends import default_backend
-
-from .models import CA
+from django.conf import settings
+from django.http import HttpResponse, Http404
+from .models import Company
 # Create your views here.
-def post_list(request):
-    print(type(generate_ECP256_private_key()))
-    return render(request, 'genkey/post_list.html', {})
+def start_generate_CSR(request):
+    return render(request, 'genkey/start_generate_CSR.html', {})
 
 def configure_CA_subject_name(request):
     form = subjectForm()
-    return render(request, 'genkey/configure_CA_subject_name.html', {'form': form} )
+    return render(request, 'genkey/configure_CA_subject_name.html', {'form': form})
 
 
 def configure_CA_key_algorithm(request):
@@ -56,13 +59,10 @@ def configure_certificate_revocation(request):
                   'country':country, 'state':state, 'locality':locality , 'common_name':common_name } )
 
 def review_and_create(request):
-    print("요기요")
     print(request.POST)
-    prev_form = CRLForm(request.POST)
+    prev_form = algorithmForm(request.POST)
     if prev_form.is_valid():
-        CRL_name = prev_form.cleaned_data['CRL_name']
-        valid_period = prev_form.cleaned_data['valid_period']
-
+        algorithm = prev_form.cleaned_data['algorithm']
 
     organization = request.POST['organization']
     algorithm = request.POST['algorithm']
@@ -73,7 +73,7 @@ def review_and_create(request):
     common_name = request.POST['common_name']
     domain = request.POST['domain']
 
-    ca = CA()
+    ca = Company()
     ca.algorithm = algorithm
     ca.organization = organization
     ca.organization_unit = organization_unit
@@ -81,8 +81,6 @@ def review_and_create(request):
     ca.state = state
     ca.locality = locality
     ca.common_name = common_name
-    ca.CRL_name = CRL_name
-    ca.valid_period = valid_period
     ca.domain = domain
 
     if algorithm == "rsa_2048":
@@ -116,12 +114,13 @@ def review_and_create(request):
         critical=False,
         # Sign the CSR with our private key.
     ).sign(ca_private_key, hashes.SHA256(), default_backend())
+
+
     ca.private_key = encode_private_key_pem_format(ca_private_key)
-    CA_public_key = generate_pub_key(ca.private_key)
+    CA_public_key = generate_pub_key(ca_private_key)
     ca.public_key = encode_public_key_pem_format(CA_public_key)
     ca.save()
     csr = csr.public_bytes(serialization.Encoding.PEM).decode()
-
     return render(request, 'genkey/review_and_create.html', {'csr':csr})
 
 def request_certificate(request):
@@ -131,12 +130,42 @@ def request_certificate(request):
 
 def export_certificate(request):
     issuer_pk = request.POST['CA']
-    issuer = Issuer.objects.get(pk=int(issuer_pk))
+    issuer_a = Issuer.objects.get(pk=int(issuer_pk))
+    subject = Company.objects.all()[0]
 
-    CA_public_key = encode_public_key_pem_format()
+    # with open("./private_key.pem", "rb") as f:
+    #     private_key_pem = f.read()
+    #     CA_private_key = load_pem_private_key(private_key_pem, password=None, backend=default_backend())
+    # with open("./public_key.pem", "rb") as f:
+    #     public_key_pem = f.read()
+    #     CA_public_key = serialization.load_pem_public_key(
+    #     public_key_pem,
+    #     backend=default_backend()
+    #     )
+    #
+    # issuer.private_key = subject.private_key
+    # issuer.public_key = subject.public_key
+    # issuer.save()
+    # subsub = load_pem_private_key(issuer.private_key.encode(), password=None, backend=default_backend())
+    # print(subsub)
+    # CA_public_key = serialization.load_pem_public_key(
+    #     issuer.public_key.encode(),
+    #     backend=default_backend()
+    # )
+    # print(CA_public_key)
 
+
+
+
+    CA_private_key =  load_pem_private_key(issuer_a.private_key.encode(), password=None, backend=default_backend())
+    CA_public_key = serialization.load_pem_public_key(
+        issuer_a.public_key.encode(),
+        backend=default_backend()
+    )
+    #CA_private_key = decode_private_key_byte_format(issuer.private_key)
+    #CA_public_key = decode_public_key_byte_format(issuer.public_key)
     csr = load_pem_x509_csr(request.POST['csr'].encode(), backend=default_backend())
-
+    print(issuer_a.domain)
     subject_country = csr.subject.get_attributes_for_oid(NameOID.COUNTRY_NAME)[0].value.capitalize()
     subject_common_name = csr.subject.get_attributes_for_oid(NameOID.COMMON_NAME)[0].value
     subject_organization = csr.subject.get_attributes_for_oid(NameOID.ORGANIZATION_NAME)[0].value
@@ -152,12 +181,13 @@ def export_certificate(request):
     ])
 
     issuer = x509.Name([
-        x509.NameAttribute(NameOID.COUNTRY_NAME, issuer.country),
-        x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, issuer.state),
-        x509.NameAttribute(NameOID.LOCALITY_NAME, issuer.locality),
-        x509.NameAttribute(NameOID.ORGANIZATION_NAME, issuer.organization),
-        x509.NameAttribute(NameOID.COMMON_NAME, issuer.common_name),
+        x509.NameAttribute(NameOID.COUNTRY_NAME, issuer_a.country),
+        x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, issuer_a.state),
+        x509.NameAttribute(NameOID.LOCALITY_NAME, issuer_a.locality),
+        x509.NameAttribute(NameOID.ORGANIZATION_NAME, issuer_a.organization),
+        x509.NameAttribute(NameOID.COMMON_NAME, issuer_a.common_name),
     ])
+
 
     cert = x509.CertificateBuilder().subject_name(
         subject
@@ -173,12 +203,15 @@ def export_certificate(request):
         # Our certificate will be valid for 10 days
         datetime.datetime.utcnow() + datetime.timedelta(days=3650)
     ).add_extension(
-        x509.SubjectAlternativeName([x509.DNSName(issuer.domain)]),
+        x509.SubjectAlternativeName([x509.DNSName(issuer_a.domain)]),
         critical=False,
         # Sign our certificate with our private key
     ).sign(CA_private_key, hashes.SHA256(), default_backend())
     # Write our certificate out to disk.
 
+    print(cert.public_bytes(
+                encoding=serialization.Encoding.PEM,
+            ))
 
 
     return render(request, 'genkey/export_certificate.html' )
@@ -218,8 +251,28 @@ def encode_private_key_pem_format(private_key):
         format=serialization.PrivateFormat.TraditionalOpenSSL,
         encryption_algorithm=serialization.NoEncryption()
     )
+    return pem.decode()
 def encode_public_key_pem_format(public_key):
     pem = public_key.public_bytes(
         encoding=serialization.Encoding.PEM,
         format=serialization.PublicFormat.SubjectPublicKeyInfo,
     )
+    return pem.decode()
+def decode_public_key_byte_format(str_encoded_public_key):
+    public_key_obj = serialization.load_pem_public_key(
+        str_encoded_public_key.encode(),
+        backend=default_backend()
+    )
+    return public_key_obj.enocde()
+
+def decode_private_key_byte_format(str_encoded_private_key):
+    private_key_obj = load_pem_private_key(str_encoded_private_key.encode, password=None, backend=default_backend())
+    return private_key_obj.encode()
+
+
+def CSR_download(request):
+    filename = "csr.pem"
+    content = request.POST['csr']
+    response = HttpResponse(content, content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
+    return response

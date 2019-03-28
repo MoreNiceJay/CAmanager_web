@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-class CA(models.Model):
+class Company(models.Model):
 
     organization = models.CharField(max_length=200)
     organization_unit = models.CharField(max_length=200)
@@ -10,10 +10,8 @@ class CA(models.Model):
     locality = models.CharField(max_length=200)
     common_name = models.CharField(max_length=200)
     algorithm = models.CharField(max_length=200)
-    CRL_name = models.CharField(max_length=200)
     domain = models.CharField(max_length=200)
-    valid_period = models.CharField(max_length=200)
-    private_key = models.CharField(max_length=1000 )
+    private_key = models.CharField(max_length=10000 )
     public_key = models.CharField(max_length=1000)
 
     created_date = models.DateTimeField(

@@ -65,7 +65,7 @@
             <li><h6>Step 1:Start to generate CSR</h6></li>
             <li><h6>Step 2:Type your company info</h6></strong></li>
             <li><h6>Step 3:Choose algorithm</h6></li>
-            <li><h5><strong><h6>Step 4:Your CSR is ready</strong></h5></li>
+            <li><h5><strong>Step 4:Your CSR is ready</strong></h5></li>
 
             </ul>
           <ul class="nav nav-sidebar">
@@ -84,23 +84,27 @@
           </div>
           <br />
           <br />
-          <div class="row">
+          <div class="row placeholders">
+            <div class="col-xs-6 col-xs-offset-0 col-sm-6 col-sm-offset-0 col-md-6 col-md-offset-0 placeholder">
           {{ csr }}
+            </div>
           </div>
           </br>
           <div class="row placeholders">
-            <div class="col-sm-9 col-sm-offset-0 col-md-10 col-md-offset-0 placeholder">
-                <span class="text-muted">Review your choices.</span>
+            <div class="col-xs-6 col-xs-offset-0 col-sm-6 col-sm-offset-0 col-md-6 col-md-offset-0 placeholder">
+                <span class="text-muted">This is your CSR. You can download now.</span>
                <form action="CSR_download" method="POST"  name="test">
                  <input type="hidden" value="{{ csr }}" name="csr">
                               {% csrf_token %}
 
-                 <button type="submit" class="btn btn-default">Export_CSR</button>
+                 <button type="submit" class="btn btn-default">Export CSR to a file</button>
                </form>
             </div>
           </div>
-
-
+        </br>
+          </br>
+        <div class="row placeholders">
+            <div class="col-xs-6 col-xs-offset-0 col-sm-6 col-sm-offset-0 col-md-6 col-md-offset-0 placeholder">
           <form action="request_certificate" method="POST"  name="test" >
             <input type="hidden" value="{{ csr }}" name="csr">
 
@@ -108,8 +112,10 @@
             <table>
               {{ form.as_p  }}
             </table>
-            <button type="submit" class="btn btn-default">Save</button>
+            <button type="submit" class="btn btn-default">Next</button>
           </form>
+               </div>
+          </div>
 
 
 

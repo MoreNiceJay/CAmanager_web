@@ -11,5 +11,6 @@ urlpatterns = [
     path('request_certificate', views.request_certificate, name='request_certificate'),
     path('export_certificate', views.export_certificate, name='export_certificate'),
     path('CSR_download', views.CSR_download, name='CSR_download'),
+    path('certificate_download', views.certificate_download, name='certificate_download'),
 
 ]

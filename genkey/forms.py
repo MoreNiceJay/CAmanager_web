@@ -25,4 +25,4 @@ class CRLForm(forms.Form):
     valid_period = forms.CharField()
 
 class CA_choice(forms.Form):
-    CA = forms.ModelChoiceField(queryset=Issuer.objects.all().order_by('common_name'),)
+    CA = forms.ModelChoiceField(queryset=Issuer.objects.all().order_by('common_name'), widget=forms.Select(attrs={'class':'form-control'}),  )

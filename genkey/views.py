@@ -209,12 +209,12 @@ def export_certificate(request):
     ).sign(CA_private_key, hashes.SHA256(), default_backend())
     # Write our certificate out to disk.
 
-    print(cert.public_bytes(
+    certificate = cert.public_bytes(
                 encoding=serialization.Encoding.PEM,
-            ))
+            ).decode()
 
 
-    return render(request, 'genkey/export_certificate.html' )
+    return render(request, 'genkey/export_certificate.html', {'certificate':certificate, 'certificate':certificate})
 
 
 
@@ -273,6 +273,13 @@ def decode_private_key_byte_format(str_encoded_private_key):
 def CSR_download(request):
     filename = "csr.pem"
     content = request.POST['csr']
+    response = HttpResponse(content, content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
+    return response
+
+def certificate_download(request):
+    filename = "certificate.pem"
+    content = request.POST['certificate']
     response = HttpResponse(content, content_type='text/plain')
     response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
     return response

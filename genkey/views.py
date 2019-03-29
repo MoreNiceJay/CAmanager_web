@@ -1,4 +1,4 @@
-import sys, pycurl,json, random, hashlib, calendar,time, datetime, os, random
+import sys, json, random, hashlib, calendar,time, datetime, os, random
 
 from django.shortcuts import render
 from .forms import subjectForm, algorithmForm, CRLForm, CA_choice
@@ -131,7 +131,7 @@ def request_certificate(request):
 def export_certificate(request):
     issuer_pk = request.POST['CA']
     issuer_a = Issuer.objects.get(pk=int(issuer_pk))
-    subject = Company.objects.all()[0]
+
 
     # with open("./private_key.pem", "rb") as f:
     #     private_key_pem = f.read()

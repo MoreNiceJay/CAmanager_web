@@ -13,8 +13,9 @@
     <title>Dashboard Template for Bootstrap</title>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-     <!-- Bootstrap core CSS -->
+    <!-- Bootstrap core CSS -->
     <link href="../../static/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Custom styles for this template -->
     <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
 
@@ -61,51 +62,75 @@
         <div class="col-xs-2 col-sm-2 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
             <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-            <li><h5><strong>Step 1:Start to generate CSR</strong></h5></li>
+
+            <li><h5><strong>Step 1:Type your CA info</strong></h5></li>
+            <li><h6>Step 2:Choose algorithm</h6></li>
+             <li><h6>Step 3:Your CA has been created successfully. </h6></li>
+
             </ul>
           <ul class="nav nav-sidebar">
-            <li><h6>Step 2:Type your company info</h6></li>
-            <li><h6>Step 3:Choose algorithm</h6></li>
-            <li><h6>Step 4:Your CSR is ready</h6></li>
-            <li><h6>Step 5:Choose your CA for signing</h6></li>
-            <li><h6>Step 6:Your Certificate is ready</h6></li>
+
+
         </div>
         <div class="col-xs-10 col-xs-offset-2 col-sm-10 col-sm-offset-2 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Step 1:Start to generate CSR</h1>
+          <h1 class="page-header">Step 1:Type your CA info</h1>
 
           <div class="row placeholders">
             <div class="col-xs-10 col-xs-offset-0 col-sm-10 col-sm-offset-0 col-md-10 col-md-offset-0 placeholder">
-                <span class="text-muted">The process will be CSR Generation -> CA Choice -> Certificate Download.</span>
+                <span class="text-muted">Configure CA info</span>
             </div>
           </div>
           <div class="row">
-            <div class="col-xs-12 col-xs-offset-0 col-sm-12 col-sm-offset-0 col-md-12 col-md-offset-0 radio">
 
-
-
-            </div>
-            <div class="row placeholders">
-            <div class="col-xs-5 col-xs-offset-1 col-sm-5 col-sm-offset-1 col-md-5 col-md-offset-1">
-              <span> Please click Next button</span>
-              <form action="configure_CA_subject_name" method="POST"  name="test" >
-              {% csrf_token %}
-                <button type="submit" class="btn btn-default">Next</button>
-              </form>
+            <div class="col-xs-10 col-xs-offset-0 col-sm-10 col-sm-offset-0 col-md-10 col-md-offset-0 radio">
+                <label>
+                  <span> The info is used as the issuer in the certificate </span>
+                </label>
             </div>
 
+          <div class="col-xs-10 col-xs-offset-0 col-sm-10 col-sm-offset-0 col-md-10 col-md-offset-0 row">
+            <form class="form-inline" action="configure_issuer_key_algorithm" method="POST" name="test" >
+              <div class="form-group">
+
+               {% csrf_token %}
+              <table>
+                <div>
+                <label style="display:flex" for="inputHelpBlock">Organization</label>
+                {{ form.organization  }}
+                </div>
+                <span id="helpBlock" class="help-block">CA name.</span>
+
+                <label class="control-label" style="display:flex" for="inputHelpBlock">Organization_unit</label>
+                {{ form.organization_unit  }}
+                <span id="helpBlock" class="help-block">CA subdivision.</span>
+                <label class="control-label" style="display:flex" for="inputHelpBlock">Country</label>
+                {{ form.country  }}
+                <span id="helpBlock" class="help-block">Two letter country code</span>
+                <label class="control-label" style="display:flex" for="inputHelpBlock">State</label>
+                {{ form.state  }}
+                <span id="helpBlock" class="help-block">Full name</span>
+                <label class="control-label" style="display:flex" for="inputHelpBlock">Locality</label>
+                {{ form.locality  }}
+                <span id="helpBlock" class="help-block">City.</span>
+                <label class="control-label" style="display:flex" for="inputHelpBlock">Common_name</label>
+                {{ form.common_name  }}
+                <span id="helpBlock" class="help-block">CA</span>
+                <label class="control-label" style="display:flex" for="inputHelpBlock">Domain</label>
+                {{ form.domain  }}
+                <span id="helpBlock" class="help-block">URL of your CA</span>
 
 
-            <div class="col-xs-5 col-xs-offset-0 col-sm-5 col-sm-offset-0 col-md-5 col-md-offset-0">
-              <span> Or you can create your own CA</span>
-              <form action="configure_issuer_subject_name" method="POST"  name="test" >
-              {% csrf_token %}
-                <button type="submit" class="btn btn-default">Next</button>
-              </form>
-            </div>
-            </div>
+
+              </table>
+
+              <button type="submit" class="btn btn-default">Next</button>
+                </div>
+            </form>
+
+          </div>
 
 
-            </div>
+
 
         </div>
       </div>

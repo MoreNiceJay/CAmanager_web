@@ -1,11 +1,7 @@
 from django import forms
 import pycountry
 from .models import Issuer
-from django.forms import ModelChoiceField
 
-class MyModelChoiceField(ModelChoiceField):
-    def label_from_instance(self, obj):
-        return "My Object #%i" % obj.id
 
 class subjectForm(forms.Form):
     organization = forms.CharField(widget=forms.TextInput(attrs={'class':"form-control", 'id':"inputHelpBlock", "placeholder" : "ex)Mofas","type":"text", "aria-describedby":"helpBlock"}))

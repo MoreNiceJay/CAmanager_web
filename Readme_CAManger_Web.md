@@ -150,6 +150,40 @@ CSR을 다운 받을 수 있습니다.
 
 
 
+# CA 생성
+
+#### 목적
+
+CA를 생성해 인증서에 서명하도록 합니다.
+
+#### 필요 인자
+
+Organization : 자신의 CA 명
+
+Country: 나라 선택
+
+State: 시,도 선택
+
+Locality: 군,구 선택
+
+Common_name:  CA명
+
+Domain: CA의 URL
+
+
+
+알고리즘을 선택합니다
+
+RSA 2048  2. RSA 4096   3. ECDSA P256  4. ECDSA P384
+
+#### 아웃풋
+
+private key, public key, self signed certificate(테스트용)을 다운 받을 수 있습니다.
+
+
+
+
+
 # 인증서 발급
 
 #### 목적

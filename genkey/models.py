@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
+
+
 class Company(models.Model):
 
     organization = models.CharField(max_length=200)
@@ -29,14 +31,18 @@ class Company(models.Model):
 class Issuer(models.Model):
 
     organization = models.CharField(max_length=200)
+    #organization_unit = models.CharField(max_length=200)
     country = models.CharField(max_length=2)
     state = models.CharField(max_length=200)
     locality = models.CharField(max_length=200)
     common_name = models.CharField(max_length=200)
+    algorithm = models.CharField(max_length=200)
     domain = models.CharField(max_length=200)
-    valid_period = models.CharField(max_length=200)
-    private_key = models.CharField(max_length=1000 )
+    private_key = models.CharField(max_length=10000)
     public_key = models.CharField(max_length=1000)
+    valid_period = models.IntegerField()
+
+
 
     created_date = models.DateTimeField(
             default=timezone.now)

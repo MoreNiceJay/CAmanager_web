@@ -78,38 +78,40 @@
                 <span class="text-muted">The process will be CSR Generation -> CA Choice -> Certificate Download.</span>
             </div>
           </div>
+
+
+
+
           <div class="row">
             <div class="col-xs-12 col-xs-offset-0 col-sm-12 col-sm-offset-0 col-md-12 col-md-offset-0 radio">
 
-
-
+            <div class="row">
+              <div class="col-xs-12 col-xs-offset-0 col-sm-12 col-sm-offset-0 col-md-12 col-md-offset-0">
+                <span> Please click Next button</span>
+                <form action="configure_CA_subject_name" method="POST"  name="test" >
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-default">Next</button>
+                </form>
+                </br>
+                </br>
+                </br>
+              </div>
             </div>
-            <div class="row placeholders">
-            <div class="col-xs-5 col-xs-offset-1 col-sm-5 col-sm-offset-1 col-md-5 col-md-offset-1">
-              <span> Please click Next button</span>
-              <form action="configure_CA_subject_name" method="POST"  name="test" >
-              {% csrf_token %}
-                <button type="submit" class="btn btn-default">Next</button>
-              </form>
-            </div>
+              <div class="row">
+                <div class="col-xs-12 col-xs-offset-0 col-sm-12 col-sm-offset-0 col-md-12 col-md-offset-0">
+                  <span> If you don't have a CA to get a sign,</span>
+                  </br>
+                  <span> you can create your own CA first</span>
+                  <form action="configure_issuer_subject_name" method="POST"  name="test" >
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-default">Create CA</button>
+                  </form>
 
-
-
-            <div class="col-xs-5 col-xs-offset-0 col-sm-5 col-sm-offset-0 col-md-5 col-md-offset-0">
-              <span> Or you can create your own CA</span>
-              <form action="configure_issuer_subject_name" method="POST"  name="test" >
-              {% csrf_token %}
-                <button type="submit" class="btn btn-default">Next</button>
-              </form>
+              </div>
             </div>
             </div>
+          </div>
 
-
-            </div>
-
-        </div>
-      </div>
-    </div>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

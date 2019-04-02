@@ -1,5 +1,7 @@
 import sys, json, random, hashlib, calendar,time, datetime, os, random
 import ast
+from cryptography.fernet import Fernet
+
 
 from django.shortcuts import render
 from .forms import subjectForm, algorithmForm, CRLForm, CA_choice
@@ -19,6 +21,8 @@ from django.http import HttpResponse, Http404
 from .models import Company
 # Create your views here.
 def start_generate_CSR(request):
+
+
     return render(request, 'genkey/start_generate_CSR.html', {})
 
 def configure_CA_subject_name(request):
@@ -116,13 +120,16 @@ def review_and_create(request):
         # Sign the CSR with our private key.
     ).sign(ca_private_key, hashes.SHA256(), default_backend())
 
-
+    
     ca.private_key = encode_private_key_pem_format(ca_private_key)
+
     CA_public_key = generate_pub_key(ca_private_key)
     ca.public_key = encode_public_key_pem_format(CA_public_key)
+
+
     ca.save()
     csr = csr.public_bytes(serialization.Encoding.PEM).decode()
-    return render(request, 'genkey/review_and_create.html', {'csr':csr})
+    return render(request, 'genkey/review_and_create.html', {'csr':csr, 'subject_name':common_name, 'private_key':ca.private_key, 'public_key':ca.public_key})
 
 def request_certificate(request):
     form = CA_choice(request.POST)
@@ -187,7 +194,7 @@ def export_certificate(request):
     certificate = cert.public_bytes(
                 encoding=serialization.Encoding.PEM,
             ).decode()
-    return render(request, 'genkey/export_certificate.html', {'certificate':certificate, 'certificate':certificate})
+    return render(request, 'genkey/export_certificate.html', {'certificate':certificate, 'subject_name':subject_organization, 'certificate':certificate})
 
 
 def configure_issuer_subject_name(request):
@@ -238,6 +245,9 @@ def review_and_create_CA(request):
     issuer_a.save()
 
 
+
+
+
     subject = issuer = x509.Name([
         x509.NameAttribute(NameOID.COUNTRY_NAME, issuer_a.country),
         x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, issuer_a.state),
@@ -245,29 +255,32 @@ def review_and_create_CA(request):
         x509.NameAttribute(NameOID.ORGANIZATION_NAME, issuer_a.organization),
         x509.NameAttribute(NameOID.COMMON_NAME, issuer_a.common_name),
         ])
+
+
     cert = x509.CertificateBuilder().subject_name(
-    subject
+        subject
     ).issuer_name(
-    issuer
+        issuer
     ).public_key(
-    ca_private_key.public_key()
+        ca_public_key
     ).serial_number(
-    x509.random_serial_number()
+        x509.random_serial_number()
     ).not_valid_before(
-    datetime.datetime.utcnow()
+        datetime.datetime.utcnow()
     ).not_valid_after(
-    # Our certificate will be valid for 10 years
-    datetime.datetime.utcnow() + datetime.timedelta(days=10*365)
+        # Our certificate will be valid for 10 days
+        datetime.datetime.utcnow() + datetime.timedelta(days=3650)
     ).add_extension(
-    x509.SubjectAlternativeName([x509.DNSName(u"localhost")]),
-    critical = False,
-    # Sign our certificate with our private key
+        x509.SubjectAlternativeName([x509.DNSName(issuer_a.domain)]),
+        critical=False,
+        # Sign our certificate with our private key
     ).sign(ca_private_key, hashes.SHA256(), default_backend())
     # Write our certificate out to disk.
 
     certificate = cert.public_bytes(
         encoding=serialization.Encoding.PEM,
     ).decode()
+
     return render(request, 'genkey/review_and_create_CA.html', {'certificate':certificate, 'private_key':issuer_a.private_key.encode(), 'public_key':issuer_a.public_key.encode()})
 
 
@@ -331,27 +344,45 @@ def CSR_download(request):
     return response
 
 def Self_signed_certificate_download(request):
-    filename = "test_certificate.pem"
+    filename = "self_signed.crt"
     content = request.POST['certificate']
     response = HttpResponse(content, content_type='text/plain')
     response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
     return response
 def private_key_download(request):
-    filename = "private_key.pem"
+    filename = "ca_private_key.pem"
     content = request.POST['private_key']
     response = HttpResponse(content, content_type='text/plain')
     response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
     return response
 def public_key_download(request):
-    filename = "public_key.pem"
+    filename = "ca_public_key.pem"
     content = request.POST['public_key']
     response = HttpResponse(content, content_type='text/plain')
     response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
     return response
 
 def certificate_download(request):
-    filename = "certificate.pem"
+    common_name = request.POST['subject_name']
+    filename = common_name + "_certificate.crt"
+
     content = request.POST['certificate']
+    response = HttpResponse(content, content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
+    return response
+
+
+def csr_private_key_download(request):
+    common_name = request.POST['subject_name']
+    filename = common_name + "_private_key.pem"
+    content = request.POST['private_key']
+    response = HttpResponse(content, content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
+    return response
+def csr_public_key_download(request):
+    common_name = request.POST['subject_name']
+    filename = common_name + "_public_key.pem"
+    content = request.POST['public_key']
     response = HttpResponse(content, content_type='text/plain')
     response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
     return response

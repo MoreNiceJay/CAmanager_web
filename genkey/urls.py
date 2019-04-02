@@ -18,5 +18,7 @@ urlpatterns = [
     path('Self_signed_certificate_download', views.Self_signed_certificate_download, name='Self_signed_certificate_download'),
     path('private_key_download', views.private_key_download, name='private_key_download'),
     path('public_key_download', views.public_key_download, name='public_key_download'),
+    path('csr_private_key_download', views.csr_private_key_download, name='csr_private_key_download'),
+    path('csr_public_key_download', views.csr_public_key_download, name='csr_public_key_download'),
 
 ]

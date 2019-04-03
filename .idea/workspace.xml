@@ -5,9 +5,6 @@
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/genkey/templates/genkey/export_certificate.html" beforeDir="false" afterPath="$PROJECT_DIR$/genkey/templates/genkey/export_certificate.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/genkey/templates/genkey/review_and_create.html" beforeDir="false" afterPath="$PROJECT_DIR$/genkey/templates/genkey/review_and_create.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/genkey/templates/genkey/review_and_create_CA.html" beforeDir="false" afterPath="$PROJECT_DIR$/genkey/templates/genkey/review_and_create_CA.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/genkey/templates/genkey/start_generate_CSR.html" beforeDir="false" afterPath="$PROJECT_DIR$/genkey/templates/genkey/start_generate_CSR.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/genkey/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/genkey/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/genkey/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/genkey/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -44,8 +41,8 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/genkey/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="368">
-              <caret line="124" column="75" selection-start-line="124" selection-start-column="75" selection-end-line="124" selection-end-column="75" />
+            <state relative-caret-position="-4324">
+              <caret line="214" column="45" lean-forward="true" selection-start-line="214" selection-start-column="45" selection-end-line="214" selection-end-column="45" />
               <folding>
                 <element signature="e#0#70#0" expanded="true" />
               </folding>
@@ -125,8 +122,8 @@
       <file leaf-file-name="review_and_create.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/genkey/templates/genkey/review_and_create.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="919">
-              <caret line="133" column="60" selection-start-line="133" selection-start-column="48" selection-end-line="133" selection-end-column="60" />
+            <state relative-caret-position="398">
+              <caret line="88" column="20" selection-start-line="88" selection-start-column="20" selection-end-line="88" selection-end-column="20" />
             </state>
           </provider>
         </entry>
@@ -134,8 +131,8 @@
       <file leaf-file-name="export_certificate.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/genkey/templates/genkey/export_certificate.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="419">
-              <caret line="100" column="55" selection-start-line="100" selection-end-line="101" />
+            <state relative-caret-position="373">
+              <caret line="95" column="40" lean-forward="true" selection-start-line="95" selection-start-column="40" selection-end-line="95" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -152,15 +149,12 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>decode</find>
-      <find>load_pem_private_key</find>
-      <find>iss</find>
       <find>decode_public_key_byte_format</find>
       <find>load</find>
       <find>default_backend</find>
-      <find># Write our certificate out to disk.</find>
-      <find>Step 2:Type your company info</find>
-      <find>col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main</find>
+      <find />
+      <find />
+      <find />
       <find>open</find>
       <find>label</find>
       <find>element.style</find>
@@ -168,20 +162,23 @@
       <find>configure</find>
       <find>min.css</find>
       <find>Step2</find>
-      <find>Step 4</find>
+      <find />
       <find>Mofa</find>
       <find>Create</find>
-      <find>This field is required.</find>
+      <find />
       <find>genk</find>
       <find>f</find>
       <find>Mofas</find>
-      <find>Submit the following certificate signing request(CSR) to a CA. Have the CA sign it and create a certificate.</find>
+      <find />
       <find>gen</find>
       <find>organization_unit</find>
       <find>builder</find>
       <find>next</find>
       <find>Next</find>
       <find>cert</find>
+      <find>encode_private_key_pem_format</find>
+      <find>csr</find>
+      <find>CA_public_key</find>
     </findStrings>
     <dirStrings>
       <dir>C:\Users\Jay\Desktop\모파스\프로젝트\스케쥴러\CAmanager_web\genkey\static\css\lib</dir>
@@ -214,14 +211,14 @@
         <option value="$PROJECT_DIR$/genkey/templates/genkey/configure_issuer_key_algorithm.html" />
         <option value="$PROJECT_DIR$/genkey/templates/genkey/start_generate_CSR.html" />
         <option value="$PROJECT_DIR$/genkey/templates/genkey/review_and_create_CA.html" />
-        <option value="$PROJECT_DIR$/genkey/templates/genkey/export_certificate.html" />
-        <option value="$PROJECT_DIR$/genkey/templates/genkey/review_and_create.html" />
         <option value="$PROJECT_DIR$/genkey/urls.py" />
+        <option value="$PROJECT_DIR$/genkey/templates/genkey/review_and_create.html" />
         <option value="$PROJECT_DIR$/genkey/views.py" />
+        <option value="$PROJECT_DIR$/genkey/templates/genkey/export_certificate.html" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-213" />
     <option name="y" value="52" />
     <option name="width" value="2131" />
@@ -687,20 +684,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/genkey/templates/genkey/export_certificate.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="419">
-          <caret line="100" column="55" selection-start-line="100" selection-end-line="101" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/genkey/templates/genkey/review_and_create.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="919">
-          <caret line="133" column="60" selection-start-line="133" selection-start-column="48" selection-end-line="133" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/genkey/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="483">
@@ -711,10 +694,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/genkey/templates/genkey/review_and_create.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="398">
+          <caret line="88" column="20" selection-start-line="88" selection-start-column="20" selection-end-line="88" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genkey/templates/genkey/export_certificate.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="373">
+          <caret line="95" column="40" lean-forward="true" selection-start-line="95" selection-start-column="40" selection-end-line="95" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/genkey/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="124" column="75" selection-start-line="124" selection-start-column="75" selection-end-line="124" selection-end-column="75" />
+        <state relative-caret-position="-4324">
+          <caret line="214" column="45" lean-forward="true" selection-start-line="214" selection-start-column="45" selection-end-line="214" selection-end-column="45" />
           <folding>
             <element signature="e#0#70#0" expanded="true" />
           </folding>

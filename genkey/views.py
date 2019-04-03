@@ -120,29 +120,46 @@ def review_and_create(request):
         # Sign the CSR with our private key.
     ).sign(ca_private_key, hashes.SHA256(), default_backend())
 
-    
-    ca.private_key = encode_private_key_pem_format(ca_private_key)
+    key = b'cnqO81S8atUww6KOalROrhtje3lrw8m314OZutfea0U='
+    f = Fernet(key)
+
+
+    private_token = f.encrypt((encode_private_key_pem_format(ca_private_key).encode()))
+    ca.private_key = private_token
 
     CA_public_key = generate_pub_key(ca_private_key)
-    ca.public_key = encode_public_key_pem_format(CA_public_key)
+
+    public_token = f.encrypt((encode_public_key_pem_format(CA_public_key).encode()))
+    ca.public_key = public_token
 
 
     ca.save()
-    csr = csr.public_bytes(serialization.Encoding.PEM).decode()
-    return render(request, 'genkey/review_and_create.html', {'csr':csr, 'subject_name':common_name, 'private_key':ca.private_key, 'public_key':ca.public_key})
+    csr_pem = csr.public_bytes(serialization.Encoding.PEM).decode()
+    csr = f.encrypt((csr_pem.encode()))
+    return render(request, 'genkey/review_and_create.html', {'csr':csr, 'csr_pem': csr_pem, 'subject_name':common_name, 'private_key':private_token, 'public_key':public_token})
 
 def request_certificate(request):
     form = CA_choice(request.POST)
     csr = request.POST['csr']
+    key = b'cnqO81S8atUww6KOalROrhtje3lrw8m314OZutfea0U='
+    f = Fernet(key)
+    csr = f.decrypt(eval(csr)).decode()
+
     return render(request, 'genkey/request_certificate.html', {'form':form, 'csr':csr})
 
 def export_certificate(request):
     issuer_pk = request.POST['CA']
     issuer_a = Issuer.objects.get(pk=int(issuer_pk))
 
-    CA_private_key =  load_pem_private_key(issuer_a.private_key.encode(), password=None, backend=default_backend())
+    key = b'cnqO81S8atUww6KOalROrhtje3lrw8m314OZutfea0U='
+    f = Fernet(key)
+
+    CA_private_key = f.decrypt((eval(issuer_a.private_key.encode())))
+    CA_public_key = f.decrypt((eval(issuer_a.public_key.encode())))
+
+    CA_private_key =  load_pem_private_key(CA_private_key, password=None, backend=default_backend())
     CA_public_key = serialization.load_pem_public_key(
-        issuer_a.public_key.encode(),
+        CA_public_key,
         backend=default_backend()
     )
     #CA_private_key = decode_private_key_byte_format(issuer.private_key)
@@ -191,10 +208,16 @@ def export_certificate(request):
     ).sign(CA_private_key, hashes.SHA256(), default_backend())
     # Write our certificate out to disk.
 
-    certificate = cert.public_bytes(
+    certificate_pem = cert.public_bytes(
                 encoding=serialization.Encoding.PEM,
             ).decode()
-    return render(request, 'genkey/export_certificate.html', {'certificate':certificate, 'subject_name':subject_organization, 'certificate':certificate})
+
+    key = b'cnqO81S8atUww6KOalROrhtje3lrw8m314OZutfea0U='
+    f = Fernet(key)
+    certificate = f.encrypt(certificate_pem.encode())
+
+
+    return render(request, 'genkey/export_certificate.html', {'certificate':certificate,'certificate_pem':certificate_pem, 'subject_name':subject_organization, })
 
 
 def configure_issuer_subject_name(request):
@@ -221,6 +244,7 @@ def review_and_create_CA(request):
     issuer_a = Issuer()
 
 
+
     issuer_a.state = prev_data['state']
     issuer_a.country = prev_data['country']
     issuer_a.locality = prev_data['locality']
@@ -239,9 +263,18 @@ def review_and_create_CA(request):
     elif issuer_a.algorithm == "ecdsa_p384":
         ca_private_key = generate_ECP384_private_key()
 
-    issuer_a.private_key = (encode_private_key_pem_format(ca_private_key))
+    key = b'cnqO81S8atUww6KOalROrhtje3lrw8m314OZutfea0U='
+    f = Fernet(key)
+
+
+    private_token = f.encrypt((encode_private_key_pem_format(ca_private_key).encode()))
+    issuer_a.private_key = private_token
+
     ca_public_key = generate_pub_key(ca_private_key)
-    issuer_a.public_key = (encode_public_key_pem_format(ca_public_key))
+
+    public_token = f.encrypt((encode_public_key_pem_format(ca_public_key).encode()))
+    issuer_a.public_key = public_token
+
     issuer_a.save()
 
 
@@ -279,9 +312,13 @@ def review_and_create_CA(request):
 
     certificate = cert.public_bytes(
         encoding=serialization.Encoding.PEM,
-    ).decode()
+    )
+    print(type(certificate))
 
-    return render(request, 'genkey/review_and_create_CA.html', {'certificate':certificate, 'private_key':issuer_a.private_key.encode(), 'public_key':issuer_a.public_key.encode()})
+    certificate = f.encrypt((certificate))
+
+
+    return render(request, 'genkey/review_and_create_CA.html', {'certificate':certificate, 'private_key':issuer_a.private_key, 'public_key':issuer_a.public_key})
 
 
 
@@ -339,6 +376,10 @@ def decode_private_key_byte_format(str_encoded_private_key):
 def CSR_download(request):
     filename = "csr.pem"
     content = request.POST['csr']
+    key = b'cnqO81S8atUww6KOalROrhtje3lrw8m314OZutfea0U='
+    f = Fernet(key)
+    content = f.decrypt(eval(content)).decode()
+
     response = HttpResponse(content, content_type='text/plain')
     response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
     return response
@@ -346,18 +387,36 @@ def CSR_download(request):
 def Self_signed_certificate_download(request):
     filename = "self_signed.crt"
     content = request.POST['certificate']
+
+    key = b'cnqO81S8atUww6KOalROrhtje3lrw8m314OZutfea0U='
+    f = Fernet(key)
+    print(content)
+    content = f.decrypt(eval(content)).decode()
+
     response = HttpResponse(content, content_type='text/plain')
     response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
     return response
 def private_key_download(request):
     filename = "ca_private_key.pem"
     content = request.POST['private_key']
+
+    key = b'cnqO81S8atUww6KOalROrhtje3lrw8m314OZutfea0U='
+    f = Fernet(key)
+    content = f.decrypt(eval(content)).decode()
+
+
     response = HttpResponse(content, content_type='text/plain')
     response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
     return response
 def public_key_download(request):
     filename = "ca_public_key.pem"
     content = request.POST['public_key']
+
+    key = b'cnqO81S8atUww6KOalROrhtje3lrw8m314OZutfea0U='
+    f = Fernet(key)
+    content = f.decrypt(eval(content)).decode()
+
+
     response = HttpResponse(content, content_type='text/plain')
     response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
     return response
@@ -365,8 +424,13 @@ def public_key_download(request):
 def certificate_download(request):
     common_name = request.POST['subject_name']
     filename = common_name + "_certificate.crt"
-
     content = request.POST['certificate']
+
+    key = b'cnqO81S8atUww6KOalROrhtje3lrw8m314OZutfea0U='
+    f = Fernet(key)
+
+    content = f.decrypt(eval(content))
+
     response = HttpResponse(content, content_type='text/plain')
     response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
     return response
@@ -376,6 +440,11 @@ def csr_private_key_download(request):
     common_name = request.POST['subject_name']
     filename = common_name + "_private_key.pem"
     content = request.POST['private_key']
+
+    key = b'cnqO81S8atUww6KOalROrhtje3lrw8m314OZutfea0U='
+    f = Fernet(key)
+    content = f.decrypt(eval(content)).decode()
+
     response = HttpResponse(content, content_type='text/plain')
     response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
     return response
@@ -383,6 +452,11 @@ def csr_public_key_download(request):
     common_name = request.POST['subject_name']
     filename = common_name + "_public_key.pem"
     content = request.POST['public_key']
+
+    key = b'cnqO81S8atUww6KOalROrhtje3lrw8m314OZutfea0U='
+    f = Fernet(key)
+    content = f.decrypt(eval(content)).decode()
+
     response = HttpResponse(content, content_type='text/plain')
     response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
     return response

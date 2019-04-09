@@ -38,6 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'genkey',
+    'mainpage',
+    'CSR',
+    'CRL',
+    'CAManager',
+    'certificate',
 ]
 
 MIDDLEWARE = [

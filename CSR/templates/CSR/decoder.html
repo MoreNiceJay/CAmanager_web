@@ -1,0 +1,53 @@
+{% extends 'CSR/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="be-content">
+        <div class="page-head">
+          <h2 class="page-head-title">CSR</h2>
+          <nav aria-label="breadcrumb" role="navigation">
+            <ol class="breadcrumb page-head-nav">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">CSR</li>
+            </ol>
+          </nav>
+        </div>
+
+      <div class="main-content container-fluid">
+         <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                <div class="card-header card-header-divider">CSR 해석기</div>
+                <div class="card-body">
+                  <p>CSR에 포함된 정보를 표시합니다.</p>
+                </div>
+              </div>
+            </div>
+         </div>
+
+          <form id="my-awesome-dropzone" action="assets/lib/dropzone/upload.php" class="dropzone">
+            <div class="dz-message">
+              <div class="col-sm-12 text-center">
+              <div class="icon"><span class="mdi mdi-cloud-upload"></span></div>
+              <h2>CSR 파일을 드래그&드롭 하세요</h2><span class="note"></span>
+              <div class="dropzone-mobile-trigger needsclick"></div>
+              </div>
+
+            </div>
+          </form>
+        </div>
+</div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'assets/lib/dropzone/dist/dropzone.js' %}" type="text/javascript"></script>
+    <script src="{% static 'assets/lib/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js' %}" type="text/javascript"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+      	//initialize the javascript
+      	App.init();
+      });
+    </script>
+{% endblock %}

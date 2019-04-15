@@ -7,4 +7,4 @@ class User(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email',)
+        fields = ('email','password')

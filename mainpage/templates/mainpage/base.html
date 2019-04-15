@@ -125,10 +125,11 @@
             </li>
           </ul> -->
           {% if user.is_authenticated %}
-          <p class="mt-0 mb-0 text-right"></p>
-          <button class="btn btn-space btn-secondary" onclick="location.href='{% url 'logout' %}'">Log
-            out</button>
-          {{ user.username }}
+          <p class=" mt-0 mb-0 text-right">
+            {{ user.username }}
+            <button class="btn btn-space btn-secondary" onclick="location.href='{% url 'logout' %}'">Log
+              out</button>
+
           </p>
 
           {% else %}

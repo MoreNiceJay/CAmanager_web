@@ -21,6 +21,7 @@ def decoder(request):
     return render(request, 'CSR/decoder.html', {})
 
 def create(request):
+    print(request)
     return render(request, 'CSR/create.html', {})
 def decoder_info(request):
     return render(request, 'CSR/decoder_info.html', {})

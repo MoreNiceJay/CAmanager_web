@@ -54,59 +54,59 @@
                     <div class="form-group row">
                       <label class="col-12 col-sm-3 col-form-label text-left text-sm-right">Common_name</label>
                       <div class="col-12 col-sm-8 col-lg-6">
-                        <input type="text" placeholder="CSR의 이름입니다." name="common_name" class="form-control">
+                        <input type="text" id="input_common_name" placeholder="CSR의 이름입니다." name="common_name"
+                          class="form-control checked">
                       </div>
                     </div>
                     <div class="form-group row">
                       <label class="col-12 col-sm-3 col-form-label text-left text-sm-right">기관명</label>
                       <div class="col-12 col-sm-8 col-lg-6">
-                        <input type="text" placeholder="예) Mofas" class="form-control" name="organization">
+                        <input type="text" id="input_organization" placeholder="예) Mofas" class="form-control checked"
+                          name="organization">
                       </div>
                     </div>
                     <div class="form-group row">
                       <label class="col-12 col-sm-3 col-form-label text-left text-sm-right">부속 기관</label>
                       <div class="col-12 col-sm-8 col-lg-6">
-                        <input type="text" placeholder="예) 보안 인증팀" class="form-control" name="organization_unit">
+                        <input type="text" id="input_organization_unit" placeholder="예) 보안 인증팀"
+                          class="form-control checked" name="organization_unit">
                       </div>
                     </div>
 
                     <div class="form-group row">
-                      <label class="col-12 col-sm-3 col-form-label text-left text-sm-right" name="country">국가</label>
+                      <label class="col-12 col-sm-3 col-form-label text-left text-sm-right">국가</label>
                       <div class="col-12 col-sm-8 col-lg-6">
-                        <select class="select2">
-                          <optgroup label="Personal">
-                            <option value="p1">Basic</option>
-                            <option value="p2">Medium</option>
-                          </optgroup>
-                          <optgroup label="Company">
-                            <option value="p3">Standard</option>
-                            <option value="p4">Silver</option>
-                            <option value="p5">Gold</option>
+                        <select class="select2 checked" id="select_country" name="country">
+
                           </optgroup>
                         </select>
                       </div>
                     </div>
                     <div class="form-group row">
-                      <label class="col-12 col-sm-3 col-form-label text-left text-sm-right" name="state">시·도</label>
+                      <label class="col-12 col-sm-3 col-form-label text-left text-sm-right">시·도</label>
                       <div class="col-12 col-sm-8 col-lg-6">
-                        <input type="text" placeholder="예)서울특별시" class="form-control">
+                        <input type="text" id="input_state" name="state" placeholder="예)서울특별시"
+                          class="form-control checked">
                       </div>
                     </div>
                     <div class="form-group row">
-                      <label class="col-12 col-sm-3 col-form-label text-left text-sm-right" name="locality">구·군</label>
+                      <label class="col-12 col-sm-3 col-form-label text-left text-sm-right">구·군</label>
                       <div class="col-12 col-sm-8 col-lg-6">
-                        <input type="text" placeholder="예)서초구" class="form-control">
+                        <input type="text" id="input_locality" name="locality" placeholder="예)서초구"
+                          class="form-control checked">
                       </div>
                     </div>
                     <div class="form-group row">
-                      <label class="col-12 col-sm-3 col-form-label text-left text-sm-right" name="domain">도메인</label>
+                      <label class="col-12 col-sm-3 col-form-label text-left text-sm-right">도메인</label>
                       <div class="col-12 col-sm-8 col-lg-6">
-                        <input type="text" placeholder="mofas.io" class="form-control">
+                        <input type="text" name="domain" id="input_domain" placeholder="mofas.io"
+                          class="form-control checked">
                       </div>
                     </div>
                     <div class="form-group row">
                       <div class="offset-sm-9 col-sm-10">
-                        <button data-wizard="#wizard1" class="btn btn-primary btn-space wizard-next">다음</button>
+                        <button id="button_first_next" data-wizard="#wizard1"
+                          class="btn btn-primary btn-space wizard-next">다음</button>
                       </div>
                     </div>
                   </form>
@@ -191,7 +191,8 @@
 
                   <div class="form-group row">
                     <div class="offset-sm-10 col-sm-12">
-                      <button data-wizard="#wizard1" class="btn btn-primary btn-space wizard-next">다음</button>
+                      <button data-wizard="#wizard1" id="button_second_next"
+                        class="btn btn-primary btn-space wizard-next">다음</button>
                     </div>
                   </div>
                 </form>
@@ -280,6 +281,72 @@
     contentSelector: '.modal-content',
     closeSelector: '.modal-close',
     classAddAfterOpen: 'modal-show'
+  });
+
+  var input_common_name = $("#input_common_name");
+  var input_organization = $("#input_organization");
+  var input_organization_unit = $("#input_organization_unit");
+  var input_state = $("#input_state");
+  var input_locality = $("#input_locality");
+  var input_domain = $("#input_domain");
+  var select_country = $("#select_country");
+  var button_first_next = $("#button_first_next");
+  var button_second_next = $("#button_second_next");
+
+  $(document).ready(function () {
+    button_first_next.attr("disabled", true);
+
+    $.ajax({
+      url: "{% url 'get_countries_in_JSON' %}",
+      type: "get",
+      dataType: "json",
+      success: function (data) {
+        $.each(data, function (key, value) {
+          select_country.append('<option value="' + key + '">' + value + '</option>')
+        });
+      },
+    });
+
+    //버튼 키업으로 해서 버튼 enabled로 바꾸기
+    //그다음 ajax 넘기기
+    $('.checked').on('keyup change', function (e) {
+      var check = false;
+      var checked = $('.checked');
+      $.each(checked, function (key, value) {
+        if (value.value == '') {
+          check = true;
+        } else {
+          check = false;
+        }
+      });
+
+      if (check) {
+        console.log(check);
+      } else {
+        button_first_next.attr("disabled", false);
+
+      }
+
+
+      $.ajax({
+        url: "{% url 'create' %}",
+        type: "post",
+        data: {
+          common_name: input_common_name.val(),
+          organization: input_organization.val(),
+          organization_unit: input_organization_unit.val(),
+          state: input_state.val(),
+          locality: input_locality.val(),
+          domain: input_domain.val(),
+
+          country: select_country.val(),
+          csrfmiddlewaretoken: "{{ csrf_token }}"
+        },
+        success: function (data) {},
+        error: function (ts) {}
+
+      })
+    });
   });
 </script>
 

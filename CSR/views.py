@@ -14,7 +14,9 @@ from cryptography.hazmat.primitives.asymmetric import rsa, ec
 from cryptography.hazmat.backends import default_backend
 from django.conf import settings
 import pycountry
-
+from . models import CSR
+from . forms import CSRForm
+from . import utility
 
 def start(request):
     return render(request, 'CSR/csr.html', {})
@@ -23,13 +25,41 @@ def decoder(request):
     return render(request, 'CSR/decoder.html', {})
 
 def create(request):
-    print(request)
+    if request.method == 'POST':
+        form = CSRForm(request.POST)
+        print(request.POST)
+        if form.is_valid():
+            csr = form.save(commit=False)
+            algorithm = csr.algorithm
+            private_key = utility.generate_private_key(algorithm)
+            public_key = utility.generate_pub_key(private_key)
+            private_key_in_pem = utility.encode_private_key_pem_format(private_key)
+            public_key_in_pem = utility.encode_public_key_pem_format(public_key)
+            encoded_private_key = utility.encode_in_Base64(private_key_in_pem)
+            encoded_public_key = utility.encode_in_Base64(public_key_in_pem)
+
+            temp_csr = utility.generate_CSR(csr.country, csr.state, csr.locality, csr.organization, csr.common_name, csr.domain, private_key)
+            csr_pem = utility.encode_CSR_in_pem_format(temp_csr)
+            
+            csr.user = request.user
+            csr.private_key = encoded_private_key
+            csr.public_key = encoded_public_key
+            csr.pem = csr_pem
+            csr.save()
+    else:
+        form = CSRForm()
     return render(request, 'CSR/create.html', {})
+
 def decoder_info(request):
     return render(request, 'CSR/decoder_info.html', {})
 
-def get_countries_in_JSON(request):
+def countries_in_JSON(request):
     countries = {country.alpha_2 : country.name for country in pycountry.countries}  
     data = json.dumps(countries)
     return HttpResponse(data)
 
+def retrive_CSR_table_data(request):
+    #request.user
+    print("dddddddddddddddddddddddddddddd")
+    data = json.dumps("{hello:'hello'}")
+    return HttpResponse(data)

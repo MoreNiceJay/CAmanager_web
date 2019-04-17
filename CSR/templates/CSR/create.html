@@ -126,8 +126,10 @@
                       <div class="form-group row pt-1 pb-1">
                         <div class="col-12 col-sm-8 col-lg-6 form-check mt-2">
                           <label class="custom-control custom-radio">
-                            <input type="radio" name="radio-stacked" checked="" class="custom-control-input"><span
-                              class="custom-control-label"><strong>RSA 2048</strong></span>
+                            <input id="input_RSA_2048" type="radio" name="radio-stacked" checked="true"
+                              class="custom-control-input" value="RSA_2048"><span
+                              class="custom-control-label"><strong>RSA
+                                2048</strong></span>
                           </label>
                         </div>
                       </div>
@@ -143,8 +145,9 @@
                       <div class="form-group row pt-1 pb-1">
                         <div class="col-12 col-sm-8 col-lg-6 form-check mt-2">
                           <label class="custom-control custom-radio">
-                            <input type="radio" name="radio-stacked" checked="" class="custom-control-input"><span
-                              class="custom-control-label"><strong>RSA 4096</strong></span>
+                            <input type="radio" id="input_RSA_4096" name="radio-stacked" class="custom-control-input"
+                              value="RSA_4096"><span class="custom-control-label"><strong>RSA
+                                4096</strong></span>
                           </label>
                         </div>
                       </div>
@@ -160,8 +163,9 @@
                       <div class="form-group row pt-1 pb-1">
                         <div class="col-12 col-sm-8 col-lg-6 form-check mt-2">
                           <label class="custom-control custom-radio">
-                            <input type="radio" name="radio-stacked" checked="" class="custom-control-input"><span
-                              class="custom-control-label"><strong>ECDSA P256</strong></span>
+                            <input type="radio" id="input_ECDSA_P256" name="radio-stacked" class="custom-control-input"
+                              value="ECDSA_P256"><span class="custom-control-label"><strong>ECDSA
+                                P256</strong></span>
                           </label>
                         </div>
                       </div>
@@ -177,8 +181,9 @@
                       <div class="form-group row pt-1 pb-1">
                         <div class="col-12 col-sm-8 col-lg-6 form-check mt-2">
                           <label class="custom-control custom-radio">
-                            <input type="radio" name="radio-stacked" checked="" class="custom-control-input"><span
-                              class="custom-control-label"><strong>ECDSA P384</strong></span>
+                            <input type="radio" id="input_ECDSA_P384" name="radio-stacked" class="custom-control-input"
+                              value="ECDSA_P384"><span class="custom-control-label"><strong>ECDSA
+                                P384</strong></span>
                           </label>
                         </div>
                       </div>
@@ -208,27 +213,26 @@
                   <div class="form-group row">
                     <div class="col-sm-6">
                       <label class="col-form-label">Common Name </label>
-                      <p>모파스.cert</p>
+                      <p id="p_common_name">모파스.cert</p>
                       <label class="col-form-label">기관명 </label>
-                      <p>모파스</p>
+                      <p id="p_organization">모파스</p>
                       <label class="col-form-label">부서</label>
-                      <p>보안인증팀</p>
+                      <p id="p_organization_unit">보안인증팀</p>
                       <label class="col-form-label">도메인</label>
-                      <p>mofas.io</p>
+                      <p id="p_domain">mofas.io</p>
                     </div>
                     <div class="col-sm-6">
                       <label class="col-form-label">국가코드</label>
-                      <p>KR</p>
+                      <p id="p_country">KR</p>
                       <label class="col-form-label">시·도</label>
-                      <p>서울특별시</p>
+                      <p id="p_state">서울특별시</p>
                       <label class="col-form-label">구·군</label>
-                      <p>서초구</p>
+                      <p id="p_locality">서초구</p>
                       <label class="col-form-label">알고리즘</label>
-                      <p>RSA 2048</p>
+                      <p id="p_algorithm">RSA 2048</p>
                       <div class="form-group row">
                         <div class="offset-sm-0 col-sm-12">
-                          <button data-wizard="#wizard1" class="btn btn-success btn-space wizard-next">Complete</button>
-                          <button data-toggle="modal" data-target="#mod-success" type="button"
+                          <button data-toggle="modal" id="button_third_modal" data-target="#mod-success" type="button"
                             class="btn btn-space btn-success" method="POST">모달</button>
 
                         </div>
@@ -290,14 +294,32 @@
   var input_locality = $("#input_locality");
   var input_domain = $("#input_domain");
   var select_country = $("#select_country");
+
+  var input_RSA_2048 = $("#input_RSA_2048");
+  var input_RSA_4096 = $("#input_RSA_4096");
+  var input_ECDSA_P256 = $("#input_ECDSA_P256");
+  var input_ECDSA_P384 = $("#input_ECDSA_P384");
+
+  var p_common_name = $("#p_common_name");
+  var p_organization = $("#p_organization");
+  var p_organization_unit = $("#p_organization_unit");
+  var p_state = $("#p_state");
+  var p_locality = $("#p_locality");
+  var p_domain = $("#p_domain");
+  var p_country = $("#p_country");
+  var p_algorithm = $("#p_algorithm");
+
+
   var button_first_next = $("#button_first_next");
   var button_second_next = $("#button_second_next");
+  var button_third_modal = $("#button_third_modal");
 
+  var result_modal = $("#result_modal");
   $(document).ready(function () {
     button_first_next.attr("disabled", true);
 
     $.ajax({
-      url: "{% url 'get_countries_in_JSON' %}",
+      url: "{% url 'countries_in_JSON' %}",
       type: "get",
       dataType: "json",
       success: function (data) {
@@ -307,30 +329,47 @@
       },
     });
 
-    //버튼 키업으로 해서 버튼 enabled로 바꾸기
-    //그다음 ajax 넘기기
+
     $('.checked').on('keyup change', function (e) {
       var check = false;
       var checked = $('.checked');
       $.each(checked, function (key, value) {
         if (value.value == '') {
           check = true;
+          button_first_next.attr("disabled", true);
+
         } else {
           check = false;
         }
       });
 
-      if (check) {
-        console.log(check);
-      } else {
+      if (check) {} else {
         button_first_next.attr("disabled", false);
-
       }
 
+    })
+    button_first_next.click(function () {
+      //TODO 여기서 리뷰 페이지 커먼네임, 국가코드 기관명, 부서, 구군 도메인 바꿔줌
+      p_common_name.text(input_common_name.val());
+      p_organization.text(input_organization.val());
+      p_organization_unit.text(input_organization_unit.val());
+      p_state.text(input_state.val());
+      p_locality.text(input_locality.val());
+      p_domain.text(input_domain.val());
+      p_country.text(select_country.val());
+    });
+    var algorithm
+    button_second_next.click(function () {
+      //TODO 여기서 리뷰 페이지 알고리즘 바꿔줌
+      algorithm = $("input[name='radio-stacked']:checked").val();
+      p_algorithm.text(algorithm);
+    })
 
+    button_third_modal.click(function () {
+      //TODO 세번째 버튼이 눌렸을때 정보의 변화가 일어나면 안됌
       $.ajax({
         url: "{% url 'create' %}",
-        type: "post",
+        type: "POST",
         data: {
           common_name: input_common_name.val(),
           organization: input_organization.val(),
@@ -338,15 +377,20 @@
           state: input_state.val(),
           locality: input_locality.val(),
           domain: input_domain.val(),
-
           country: select_country.val(),
+          algorithm: algorithm,
           csrfmiddlewaretoken: "{{ csrf_token }}"
         },
         success: function (data) {},
         error: function (ts) {}
-
       })
-    });
+    })
+
+    $('#mod-success').on('hide.bs.modal', function (e) {
+      // 모달 나갈때 
+      location.replace("{% url 'start'%}");
+    })
+
   });
 </script>
 
@@ -363,22 +407,22 @@
           <div class="text-success"><span class="modal-main-icon mdi mdi-check"></span></div>
           <h3>CSR이 생성 되었습니다.</h3>
           <div class="mt-4">
-            <button type="button" data-dismiss="modal" class="btn btn-space btn-secondary">E-mail CSR </button>
-            <button type="button" data-dismiss="modal" class="btn btn-space btn-secondary">CSR 다운로드</button>
+            <button type="button" class="btn btn-space btn-secondary">E-mail CSR </button>
+            <button type="button" class="btn btn-space btn-secondary">CSR 다운로드</button>
           </div>
           <br>
           <br>
           <p>프라이빗키와 퍼블릭키를 다운로드 받아 주세요.<br>이 페이지를 벗어나면 다운 받을 수 없습니다.</p>
           <div class="mt-4">
-            <button type="button" data-dismiss="modal" class="btn btn-space btn-secondary">Private Key 다운로드</button>
-            <button type="button" data-dismiss="modal" class="btn btn-space btn-secondary">Public Key 다운로드</button>
+            <button type="button" class="btn btn-space btn-secondary">Private Key 다운로드</button>
+            <button type="button" class="btn btn-space btn-secondary">Public Key 다운로드</button>
           </div>
           <br>
           <br>
           <p>CA에게 서명을 요청하세요.<br>인증서를 생성 할 수 있습니다.</p>
           <div class="mt-4">
             <button type="button" data-dismiss="modal" class="btn btn-space btn-secondary">마침</button>
-            <button type="button" data-dismiss="modal" class="btn btn-space btn-success">인증서 만들기</button>
+            <button type="button" class="btn btn-space btn-success">인증서 만들기</button>
           </div>
         </div>
       </div>

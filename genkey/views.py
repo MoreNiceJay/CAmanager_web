@@ -34,7 +34,6 @@ def configure_CA_key_algorithm(request):
     print(request.POST)
     prev_form = subjectForm(request.POST)
     if prev_form.is_valid():
-
         organization = prev_form.cleaned_data['organization']
         organization_unit = prev_form.cleaned_data['organization_unit']
         country = prev_form.cleaned_data['country']

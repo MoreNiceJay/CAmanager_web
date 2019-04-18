@@ -15,6 +15,7 @@ from cryptography.hazmat.backends import default_backend
 from django.conf import settings
 import pycountry
 from . models import CSR
+from accounts.models import User
 from . forms import CSRForm
 from . import utility
 
@@ -27,7 +28,6 @@ def decoder(request):
 def create(request):
     if request.method == 'POST':
         form = CSRForm(request.POST)
-        print(request.POST)
         if form.is_valid():
             csr = form.save(commit=False)
             algorithm = csr.algorithm
@@ -46,9 +46,11 @@ def create(request):
             csr.public_key = encoded_public_key
             csr.pem = csr_pem
             csr.save()
+        return render(request, 'CSR/create.html', {"csr":csr_pem})
+
     else:
         form = CSRForm()
-    return render(request, 'CSR/create.html', {})
+        return render(request, 'CSR/create.html',{})
 
 def decoder_info(request):
     return render(request, 'CSR/decoder_info.html', {})
@@ -59,7 +61,21 @@ def countries_in_JSON(request):
     return HttpResponse(data)
 
 def retrive_CSR_table_data(request):
-    #request.user
-    print("dddddddddddddddddddddddddddddd")
-    data = json.dumps("{hello:'hello'}")
+    try:
+        user = User.objects.get(username=request.user.username)
+        csrs = CSR.objects.filter(user=user)
+    except:              
+        raise NoUserError
+    data = []
+    for csr in csrs:
+        data.append({'organization':csr.organization,'domain':csr.domain,'algorithm':csr.algorithm,'created_date':csr.created_date.strftime("%Y/%m/%d") })
+    data = json.dumps(data)
     return HttpResponse(data)
+
+def downlaod_csr(request):
+    filename = "csr.pem"
+    content = request.POST['csr']
+    print(content)
+    response = HttpResponse(content, content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
+    return response

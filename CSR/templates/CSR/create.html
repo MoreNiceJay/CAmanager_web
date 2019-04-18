@@ -407,8 +407,17 @@
           <div class="text-success"><span class="modal-main-icon mdi mdi-check"></span></div>
           <h3>CSR이 생성 되었습니다.</h3>
           <div class="mt-4">
-            <button type="button" class="btn btn-space btn-secondary">E-mail CSR </button>
-            <button type="button" class="btn btn-space btn-secondary">CSR 다운로드</button>
+            <form action="download_csr/" method="POST" name="download_csr">
+              {% csrf_token %}
+              <button type="button" class="btn btn-space btn-secondary">E-mail CSR </button>
+              <input type="hidden" value="{{ csr }}" name="csr">
+            </form>
+
+            <form action="download_csr/" method="POST" name="download_csr">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-space btn-secondary">CSR 다운로드</button>
+              <input type="hidden" value="{{ csr }}" name="csr">
+            </form>
           </div>
           <br>
           <br>

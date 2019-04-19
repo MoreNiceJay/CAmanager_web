@@ -210,6 +210,7 @@
                       <h3 class="wizard-title">리뷰</h3>
                     </div>
                   </div>
+
                   <div class="form-group row">
                     <div class="col-sm-6">
                       <label class="col-form-label">Common Name </label>
@@ -220,6 +221,7 @@
                       <p id="p_organization_unit">보안인증팀</p>
                       <label class="col-form-label">도메인</label>
                       <p id="p_domain">mofas.io</p>
+                      {{hi}}
                     </div>
                     <div class="col-sm-6">
                       <label class="col-form-label">국가코드</label>
@@ -363,6 +365,27 @@
       //TODO 여기서 리뷰 페이지 알고리즘 바꿔줌
       algorithm = $("input[name='radio-stacked']:checked").val();
       p_algorithm.text(algorithm);
+
+
+      $.ajax({
+        url: "{% url 'create' %}",
+        type: "POST",
+        data: {
+          common_name: input_common_name.val(),
+          organization: input_organization.val(),
+          organization_unit: input_organization_unit.val(),
+          state: input_state.val(),
+          locality: input_locality.val(),
+          domain: input_domain.val(),
+          country: select_country.val(),
+          algorithm: algorithm,
+          csrfmiddlewaretoken: "{{ csrf_token }}"
+        },
+        success: function (data) {},
+        error: function (ts) {}
+      })
+
+
     })
 
     button_third_modal.click(function () {
@@ -381,7 +404,11 @@
           algorithm: algorithm,
           csrfmiddlewaretoken: "{{ csrf_token }}"
         },
-        success: function (data) {},
+        success: function (data) {
+          console.log(data);
+          $('input[name="csr"]').val(data);
+
+        },
         error: function (ts) {}
       })
     })
@@ -406,25 +433,45 @@
         <div class="text-center">
           <div class="text-success"><span class="modal-main-icon mdi mdi-check"></span></div>
           <h3>CSR이 생성 되었습니다.</h3>
-          <div class="mt-4">
-            <form action="download_csr/" method="POST" name="download_csr">
-              {% csrf_token %}
-              <button type="button" class="btn btn-space btn-secondary">E-mail CSR </button>
-              <input type="hidden" value="{{ csr }}" name="csr">
-            </form>
+          <div class="row">
+            <div class="col-sm-6 text-right">
+              <form action="{% url 'email_csr' %}" method="POST" name="email_csr">
+                {% csrf_token %}
+                <button type="button" class="btn btn-space btn-secondary">E-mail CSR </button>
+                <input type="hidden" value="{{ csr }}" name="csr">
+              </form>
 
-            <form action="download_csr/" method="POST" name="download_csr">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-space btn-secondary">CSR 다운로드</button>
-              <input type="hidden" value="{{ csr }}" name="csr">
-            </form>
+
+            </div>
+
+            <div class="col-sm-6 text-left">
+              <form action="{% url 'download_csr' %}" method="POST" name="csr">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-space btn-secondary">CSR 다운로드</button>
+                <input type="text" value="{{ csr }}" name="csr">
+              </form>
+            </div>
           </div>
           <br>
+
           <br>
           <p>프라이빗키와 퍼블릭키를 다운로드 받아 주세요.<br>이 페이지를 벗어나면 다운 받을 수 없습니다.</p>
-          <div class="mt-4">
-            <button type="button" class="btn btn-space btn-secondary">Private Key 다운로드</button>
-            <button type="button" class="btn btn-space btn-secondary">Public Key 다운로드</button>
+          <div class="row">
+            <div class="col-sm-6 text-right">
+              <form action="{% url 'download_private_key' %}" method="POST" name="private_key">
+                {% csrf_token %}
+                <button type="button" class="btn btn-space btn-secondary">Private Key 다운로드</button>
+                <input type="hidden" value="{{ private_key }}" name="private_key">
+              </form>
+            </div>
+            <div class="col-sm-6 text-left">
+              <form action="{% url 'download_public_key' %}" method="POST" name="public_key">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-space btn-secondary">Public Key 다운로드</button>
+                <input type="hidden" value="{{ public_key }}" name="public_key">
+                <input type="hidden" value="{{ hi }}" name="hi">
+
+            </div>
           </div>
           <br>
           <br>

@@ -41,12 +41,15 @@ def create(request):
             temp_csr = utility.generate_CSR(csr.country, csr.state, csr.locality, csr.organization, csr.common_name, csr.domain, private_key)
             csr_pem = utility.encode_CSR_in_pem_format(temp_csr)
             
+            print(type(csr_pem))
+
             csr.user = request.user
             csr.private_key = encoded_private_key
             csr.public_key = encoded_public_key
             csr.pem = csr_pem
             csr.save()
-        return render(request, 'CSR/create.html', {"csr":csr_pem})
+        return HttpResponse(csr_pem)
+        #return render(request, 'CSR/create.html', {'csr':csr_pem, 'hi':"heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee","private_key":private_key_in_pem, "public_key":public_key_in_pem, })
 
     else:
         form = CSRForm()
@@ -64,6 +67,7 @@ def retrive_CSR_table_data(request):
     try:
         user = User.objects.get(username=request.user.username)
         csrs = CSR.objects.filter(user=user)
+
     except:              
         raise NoUserError
     data = []
@@ -72,10 +76,38 @@ def retrive_CSR_table_data(request):
     data = json.dumps(data)
     return HttpResponse(data)
 
-def downlaod_csr(request):
+def email_csr(request):
     filename = "csr.pem"
     content = request.POST['csr']
     print(content)
     response = HttpResponse(content, content_type='text/plain')
     response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
     return response
+
+def download_csr(request):
+    filename = "csr.pem"
+    content = request.POST['csr']
+    print(content)
+    response = HttpResponse(content, content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
+    return response
+
+def download_private_key(request):
+    filename = "private_key.pem"
+    content = request.POST['private_key']
+    print(content)
+
+    response = HttpResponse(content, content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
+    return response
+
+def download_public_key(request):
+    print("lllllllllllllllllllllllllllllllllllllllllll")
+    filename = "public_key.pem"
+    content = request.POST['public_key']
+    print(request.POST)
+    print(content)
+    response = HttpResponse(content, content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
+    return response
+

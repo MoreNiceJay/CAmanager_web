@@ -6,7 +6,7 @@ from accounts.models import User
 
 class CSR(models.Model):
 
-    user = models.ForeignKey(User,on_delete=models.CASCADE,)
+    user = models.ForeignKey(("accounts.User"),on_delete=models.CASCADE,)
     organization = models.CharField(max_length=200)
     organization_unit = models.CharField(max_length=200)
     country = models.CharField(max_length=2)

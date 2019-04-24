@@ -28,6 +28,8 @@ DEBUG = True
 LOGIN_REDIRECT_URL = '/'
 ALLOWED_HOSTS = ['127.0.0.1',]
 
+
+# User model
 AUTH_USER_MODEL = "accounts.User"
 CUSTOM_USER_MODEL = 'accounts.User'
 ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
@@ -36,6 +38,17 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+#email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = 'example03277@gmail.com'
+EMAIL_HOST_PASSWORD = 'morenicejay@'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
 # Application definition
 AUTHENTICATION_BACKENDS = (
         'django.contrib.auth.backends.ModelBackend',

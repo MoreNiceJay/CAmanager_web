@@ -315,11 +315,11 @@
   var button_first_next = $("#button_first_next");
   var button_second_next = $("#button_second_next");
   var button_third_modal = $("#button_third_modal");
+  var button_email_csr = $("#button_email_csr");
 
   var result_modal = $("#result_modal");
   $(document).ready(function () {
     button_first_next.attr("disabled", true);
-
     $.ajax({
       url: "{% url 'countries_in_JSON' %}",
       type: "get",
@@ -365,8 +365,6 @@
       //TODO 여기서 리뷰 페이지 알고리즘 바꿔줌
       algorithm = $("input[name='radio-stacked']:checked").val();
       p_algorithm.text(algorithm);
-
-
       $.ajax({
         url: "{% url 'create' %}",
         type: "POST",
@@ -384,15 +382,17 @@
         success: function (data) {},
         error: function (ts) {}
       })
-
-
     })
+
+
+
 
     button_third_modal.click(function () {
       //TODO 세번째 버튼이 눌렸을때 정보의 변화가 일어나면 안됌
       $.ajax({
         url: "{% url 'create' %}",
         type: "POST",
+        dataType: "json",
         data: {
           common_name: input_common_name.val(),
           organization: input_organization.val(),
@@ -405,19 +405,41 @@
           csrfmiddlewaretoken: "{{ csrf_token }}"
         },
         success: function (data) {
-          console.log(data);
-          $('input[name="csr"]').val(data);
+          $('input[name="csr"]').val(data.csr);
+          $('input[name="public_key"]').val(data.public_key);
+          $('input[name="private_key"]').val(data.private_key);
+        },
+        error: function (ts) {}
+      })
+    })
+
+    $("#button_email_csr").click(function () {
+      alert("yooooooooooooooooooo")
+      $.ajax({
+        url: "{% url 'email_csr' %}",
+        type: "POST",
+        data: {
+          csr: $('input[name="csr"]').val(),
+          csrfmiddlewaretoken: "{{ csrf_token }}"
+        },
+        success: function (data) {
+
+          alert("Email has been sent")
+
+
 
         },
         error: function (ts) {}
       })
     })
 
+
+
+
     $('#mod-success').on('hide.bs.modal', function (e) {
       // 모달 나갈때 
       location.replace("{% url 'start'%}");
     })
-
   });
 </script>
 
@@ -435,32 +457,25 @@
           <h3>CSR이 생성 되었습니다.</h3>
           <div class="row">
             <div class="col-sm-6 text-right">
-              <form action="{% url 'email_csr' %}" method="POST" name="email_csr">
-                {% csrf_token %}
-                <button type="button" class="btn btn-space btn-secondary">E-mail CSR </button>
-                <input type="hidden" value="{{ csr }}" name="csr">
-              </form>
-
-
+              <button class="btn btn-space btn-secondary" id="button_email_csr">E-mail CSR </button>
+              <input type="hidden" value="{{ csr }}" name="csr">
             </div>
-
             <div class="col-sm-6 text-left">
               <form action="{% url 'download_csr' %}" method="POST" name="csr">
                 {% csrf_token %}
+                <input type="hidden" value="" name="csr">
                 <button type="submit" class="btn btn-space btn-secondary">CSR 다운로드</button>
-                <input type="text" value="{{ csr }}" name="csr">
               </form>
             </div>
           </div>
           <br>
-
           <br>
           <p>프라이빗키와 퍼블릭키를 다운로드 받아 주세요.<br>이 페이지를 벗어나면 다운 받을 수 없습니다.</p>
           <div class="row">
             <div class="col-sm-6 text-right">
               <form action="{% url 'download_private_key' %}" method="POST" name="private_key">
                 {% csrf_token %}
-                <button type="button" class="btn btn-space btn-secondary">Private Key 다운로드</button>
+                <button type="submit" class="btn btn-space btn-secondary">Private Key 다운로드</button>
                 <input type="hidden" value="{{ private_key }}" name="private_key">
               </form>
             </div>
@@ -468,88 +483,97 @@
               <form action="{% url 'download_public_key' %}" method="POST" name="public_key">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-space btn-secondary">Public Key 다운로드</button>
-                <input type="hidden" value="{{ public_key }}" name="public_key">
-                <input type="hidden" value="{{ hi }}" name="hi">
+                <input type="hidden" value="" name="public_key">
 
             </div>
           </div>
           <br>
           <br>
           <p>CA에게 서명을 요청하세요.<br>인증서를 생성 할 수 있습니다.</p>
-          <div class="mt-4">
-            <button type="button" data-dismiss="modal" class="btn btn-space btn-secondary">마침</button>
-            <button type="button" class="btn btn-space btn-success">인증서 만들기</button>
+          <div class="row">
+            <div class="col-sm-6 text-right">
+              <form action="{% url 'download_private_key' %}" method="POST" name="private_key">
+                {% csrf_token %}
+                <button type="button" data-dismiss="modal" class="btn btn-space btn-secondary">마침</button>
+                <input type="hidden" value="{{ private_key }}" name="private_key">
+              </form>
+            </div>
+            <div class="col-sm-6 text-left">
+              <form action="{% url 'download_public_key' %}" method="POST" name="public_key">
+                {% csrf_token %}
+                <button type="button" class="btn btn-space btn-success">인증서 만들기</button>
+                <input type="hidden" value="" name="public_key">
+            </div>
           </div>
         </div>
+        <div class="modal-footer"></div>
       </div>
-      <div class="modal-footer"></div>
     </div>
   </div>
-</div>
-<div id="mod-primary" tabindex="-1" role="dialog" class="modal fade">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" data-dismiss="modal" aria-hidden="true" class="close"><span
-            class="mdi mdi-close"></span></button>
-      </div>
-      <div class="modal-body">
-        <div class="text-center">
-          <div class="text-primary"><span class="modal-main-icon mdi mdi-info-outline"></span></div>
-          <h3>Information!</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>Fusce ultrices euismod lobortis.</p>
-          <div class="mt-8">
-            <button type="button" data-dismiss="modal" class="btn btn-space btn-secondary">Cancel</button>
-            <button type="button" data-dismiss="modal" class="btn btn-space btn-primary">Proceed</button>
+  <div id="mod-primary" tabindex="-1" role="dialog" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" data-dismiss="modal" aria-hidden="true" class="close"><span
+              class="mdi mdi-close"></span></button>
+        </div>
+        <div class="modal-body">
+          <div class="text-center">
+            <div class="text-primary"><span class="modal-main-icon mdi mdi-info-outline"></span></div>
+            <h3>Information!</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>Fusce ultrices euismod lobortis.</p>
+            <div class="mt-8">
+              <button type="button" data-dismiss="modal" class="btn btn-space btn-secondary">Cancel</button>
+              <button type="button" data-dismiss="modal" class="btn btn-space btn-primary">Proceed</button>
+            </div>
           </div>
         </div>
+        <div class="modal-footer"></div>
       </div>
-      <div class="modal-footer"></div>
     </div>
   </div>
-</div>
-<div id="mod-warning" tabindex="-1" role="dialog" class="modal fade">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" data-dismiss="modal" aria-hidden="true" class="close"><span
-            class="mdi mdi-close"></span></button>
-      </div>
-      <div class="modal-body">
-        <div class="text-center">
-          <div class="text-warning"><span class="modal-main-icon mdi mdi-alert-triangle"></span></div>
-          <h3>Warning!</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>Fusce ultrices euismod lobortis.</p>
-          <div class="mt-8">
-            <button type="button" data-dismiss="modal" class="btn btn-space btn-secondary">Cancel</button>
-            <button type="button" data-dismiss="modal" class="btn btn-space btn-warning">Proceed</button>
+  <div id="mod-warning" tabindex="-1" role="dialog" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" data-dismiss="modal" aria-hidden="true" class="close"><span
+              class="mdi mdi-close"></span></button>
+        </div>
+        <div class="modal-body">
+          <div class="text-center">
+            <div class="text-warning"><span class="modal-main-icon mdi mdi-alert-triangle"></span></div>
+            <h3>Warning!</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>Fusce ultrices euismod lobortis.</p>
+            <div class="mt-8">
+              <button type="button" data-dismiss="modal" class="btn btn-space btn-secondary">Cancel</button>
+              <button type="button" data-dismiss="modal" class="btn btn-space btn-warning">Proceed</button>
+            </div>
           </div>
         </div>
+        <div class="modal-footer"></div>
       </div>
-      <div class="modal-footer"></div>
     </div>
   </div>
-</div>
-<div id="mod-danger" tabindex="-1" role="dialog" class="modal fade">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" data-dismiss="modal" aria-hidden="true" class="close"><span
-            class="mdi mdi-close"></span></button>
-      </div>
-      <div class="modal-body">
-        <div class="text-center">
-          <div class="text-danger"><span class="modal-main-icon mdi mdi-close-circle-o"></span></div>
-          <h3>Danger!</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>Fusce ultrices euismod lobortis.</p>
-          <div class="mt-8">
-            <button type="button" data-dismiss="modal" class="btn btn-space btn-secondary">Cancel</button>
-            <button type="button" data-dismiss="modal" class="btn btn-space btn-danger">Proceed</button>
+  <div id="mod-danger" tabindex="-1" role="dialog" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" data-dismiss="modal" aria-hidden="true" class="close"><span
+              class="mdi mdi-close"></span></button>
+        </div>
+        <div class="modal-body">
+          <div class="text-center">
+            <div class="text-danger"><span class="modal-main-icon mdi mdi-close-circle-o"></span></div>
+            <h3>Danger!</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>Fusce ultrices euismod lobortis.</p>
+            <div class="mt-8">
+              <button type="button" data-dismiss="modal" class="btn btn-space btn-secondary">Cancel</button>
+              <button type="button" data-dismiss="modal" class="btn btn-space btn-danger">Proceed</button>
+            </div>
           </div>
         </div>
+        <div class="modal-footer"></div>
       </div>
-      <div class="modal-footer"></div>
     </div>
   </div>
-</div>
-{% endblock %}
+  {% endblock %}
